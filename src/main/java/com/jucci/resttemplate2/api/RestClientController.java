@@ -19,7 +19,7 @@ public class RestClientController {
     public RestTemplate restTemplate;
 
     public ResponseEntity<List<EmployeeDTO>> getEmployeeList(){
-        Object result = restTemplate.getForEntity(webUrl, Object.class);
+        ResponseEntity result = restTemplate.getForEntity(webUrl, ResponseEntity.class);
         System.out.println("Result:  " + result);
         return (ResponseEntity<List<EmployeeDTO>>) result;
     }
