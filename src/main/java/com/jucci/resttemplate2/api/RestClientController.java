@@ -4,6 +4,7 @@ import com.jucci.resttemplate2.model.EmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,9 +19,11 @@ public class RestClientController {
     @Autowired
     public RestTemplate restTemplate;
 
+    @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getEmployeeList(){
-        ResponseEntity result = restTemplate.getForEntity(webUrl, ResponseEntity.class);
-        System.out.println("Result:  " + result);
-        return (ResponseEntity<List<EmployeeDTO>>) result;
+        ResponseEntity<List> result = restTemplate.getForEntity(webUrl, List.class);
+        List<EmployeeDTO> responseBody = result.getBody();
+
+        return ResponseEntity.ok(responseBody);
     }
 }
