@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
 import java.util.List;
 
 @Controller
 @RequestMapping("/test")
 public class RestClientController {
 
-    private static final String webUrl = "http://localhost:8080/employees";
+    private static final String webUrl = "http://localhost:8080/";
 
     @Autowired
     public RestTemplate restTemplate;
@@ -27,19 +26,19 @@ public class RestClientController {
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-COM-PERSIST", "true");
         headers.set("X-COM-LOCATION", "Azerbaijan");
-
         HttpEntity<EmployeeDTO> requestEntity = new HttpEntity<>(null, headers);
         /* send get */
-        ResponseEntity<List> result = restTemplate.exchange(webUrl, HttpMethod.GET, requestEntity, List.class);
+        ResponseEntity<List> result = restTemplate.exchange(webUrl + "employees", HttpMethod.GET, requestEntity, List.class);
         List<EmployeeDTO> responseBody = result.getBody();
-
         return ResponseEntity.ok(responseBody);
     }
+
+
 
     @PostMapping
     public ResponseEntity<EmployeeDTO> save(@RequestBody EmployeeDTO employeeDTO){
         /* send post  */
-        ResponseEntity<EmployeeDTO> result = restTemplate.postForEntity(webUrl, employeeDTO, EmployeeDTO.class);
+        ResponseEntity<EmployeeDTO> result = restTemplate.postForEntity(webUrl + "employee", employeeDTO, EmployeeDTO.class);
         EmployeeDTO responseBody = result.getBody();
         return ResponseEntity.ok(responseBody);
     }
