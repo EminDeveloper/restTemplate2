@@ -2,7 +2,7 @@ package com.jucci.resttemplate2.api;
 
 import com.jucci.resttemplate2.model.EmployeeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -23,7 +24,13 @@ public class RestClientController {
 
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> getEmployeeList(){
-        ResponseEntity<List> result = restTemplate.getForEntity(webUrl, List.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-COM-PERSIST", "true");
+        headers.set("X-COM-LOCATION", "Azerbaijan");
+
+        HttpEntity<EmployeeDTO> requestEntity = new HttpEntity<>(null, headers);
+        /* send get */
+        ResponseEntity<List> result = restTemplate.exchange(webUrl, HttpMethod.GET, requestEntity, List.class);
         List<EmployeeDTO> responseBody = result.getBody();
 
         return ResponseEntity.ok(responseBody);
@@ -31,6 +38,7 @@ public class RestClientController {
 
     @PostMapping
     public ResponseEntity<EmployeeDTO> save(@RequestBody EmployeeDTO employeeDTO){
+        /* send post  */
         ResponseEntity<EmployeeDTO> result = restTemplate.postForEntity(webUrl, employeeDTO, EmployeeDTO.class);
         EmployeeDTO responseBody = result.getBody();
         return ResponseEntity.ok(responseBody);
